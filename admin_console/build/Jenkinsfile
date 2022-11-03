@@ -47,18 +47,18 @@ pipeline {
             steps {
                 container('git') {
                     script {
-//                         sh "git -C /kaniko/workspace/datagram_build pull"
-//                         sh "git -C /kaniko/workspace/datagram stash"
-//                         sh "git -C /kaniko/workspace/datagram checkout ${params.BRANCH}"
-//                         sh "git -C /kaniko/workspace/datagram pull"
-                       withCredentials([[
+                        sh "git -C /kaniko/workspace/datagram_ci_cd pull"
+                        withCredentials([[
                            $class: 'UsernamePasswordMultiBinding',
                            credentialsId: 'rmusin',
                            usernameVariable: 'USERNAME',
                            passwordVariable: 'PASSWORD'
-                       ]]) {
-                           sh "git clone https://$USERNAME:$PASSWORD@neogit.neoflex.ru/datagram/datagram-admin-console.git"
-//                        sh "git clone https://github.com/neoflex-consulting/datagram.git"
+                        ]]) {
+//                         sh "git -C /kaniko/workspace/datagram-admin-console stash"
+//                         sh "git -C /kaniko/workspace/datagram-admin-console checkout ${params.BRANCH}"
+//                         sh "git -C /kaniko/workspace/datagram-admin-console pull"
+                        sh "rm -rf datagram-admin-console"
+                        sh "git clone https://$USERNAME:$PASSWORD@neogit.neoflex.ru/datagram/datagram-admin-console.git"
                         }
                     }
                 }
@@ -69,7 +69,7 @@ pipeline {
             steps {
                 container('maven') {
                     script {
-                        sh "mvn clean install -f /root/.m2/datagram/pom.xml"
+                        sh "mvn clean install -f /root/.m2/datagram-admin-console/dg-admin-console-bk/pom.xml"
                     }
                 }
             }
@@ -79,7 +79,7 @@ pipeline {
               steps {
                 container('kaniko') {
                   script {
-                    sh "/kaniko/executor --dockerfile /root/builder/datagram_build/Dockerfile \
+                    sh "/kaniko/executor --dockerfile /root/builder/datagram-admin-console/src/main/resources/docker/postgres/Dockerfile  \
                                      --context /root/builder \
                                      --force \
                                      --destination=zanzibeer/${params.CHART_NAME}:${params.IMAGE_TAG}"
