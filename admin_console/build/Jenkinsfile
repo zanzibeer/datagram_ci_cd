@@ -9,6 +9,10 @@ properties([
                                 name: 'IMAGE_TAG',
                                 defaultValue: ''
                         ),
+                        stringParam(
+                                name: 'BUILD_PARAMS',
+                                defaultValue: ''
+                        ),
                         choiceParam(
                                 name: 'BRANCH',
                                 choices: ['main', 'frontend']
@@ -69,7 +73,7 @@ pipeline {
             steps {
                 container('maven') {
                     script {
-                        sh "mvn clean install -X -f /root/.m2/datagram-admin-console/dg-admin-console-bk/pom.xml"
+                        sh "mvn clean install ${params.BUILD_PARAMS} -f /root/.m2/datagram-admin-console/dg-admin-console-bk/pom.xml"
                     }
                 }
             }
