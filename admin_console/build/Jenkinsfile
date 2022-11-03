@@ -53,12 +53,13 @@ pipeline {
 //                         sh "git -C /kaniko/workspace/datagram pull"
                        withCredentials([[
                            $class: 'UsernamePasswordMultiBinding',
-                           credentialsId: 'neogit',
+                           credentialsId: 'rmusin',
                            usernameVariable: 'USERNAME',
                            passwordVariable: 'PASSWORD'
                        ]]) {
-                           sh "git clone https://neogit.neoflex.ru/datagram/datagram-admin-console.git"
+                           sh "git clone https://$USERNAME:$PASSWORD@neogit.neoflex.ru/datagram/datagram-admin-console.git"
 //                        sh "git clone https://github.com/neoflex-consulting/datagram.git"
+                        }
                     }
                 }
             }
