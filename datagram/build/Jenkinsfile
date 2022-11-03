@@ -47,7 +47,7 @@ pipeline {
             steps {
                 container('git') {
                     script {
-                        sh "git -C /kaniko/workspace/datagram_build pull"
+                        sh "git -C /kaniko/workspace/datagram_ci_cd pull"
                         sh "git -C /kaniko/workspace/datagram stash"
                         sh "git -C /kaniko/workspace/datagram checkout ${params.BRANCH}" 
                         sh "git -C /kaniko/workspace/datagram pull"
@@ -72,7 +72,7 @@ pipeline {
               steps {
                 container('kaniko') {
                   script {
-                    sh "/kaniko/executor --dockerfile /root/builder/datagram_build/Dockerfile \
+                    sh "/kaniko/executor --dockerfile /root/builder/datagram_ci_cd/datagram/build/Dockerfile \
                                      --context /root/builder \
                                      --force \
                                      --destination=zanzibeer/${params.CHART_NAME}:${params.IMAGE_TAG}"
