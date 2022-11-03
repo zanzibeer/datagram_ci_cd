@@ -69,7 +69,7 @@ pipeline {
             steps {
                 container('maven') {
                     script {
-                        sh "mvn clean install -f /root/.m2/datagram-admin-console/dg-admin-console-bk/pom.xml"
+                        sh "mvn clean install -X -f /root/.m2/datagram-admin-console/dg-admin-console-bk/pom.xml"
                     }
                 }
             }
