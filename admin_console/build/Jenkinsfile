@@ -83,7 +83,7 @@ pipeline {
               steps {
                 container('kaniko') {
                   script {
-                    sh "/kaniko/executor --dockerfile /root/builder/datagram-admin-console/dg-admin-console-bk/src/main/resources/docker/postgres/Dockerfile \
+                    sh "/kaniko/executor --dockerfile /root/builder/datagram_ci_cd/admin-console-bk/Dockerfile \
                                      --context /root/builder \
                                      --force \
                                      --destination=zanzibeer/${params.CHART_NAME}:${params.IMAGE_TAG}"
