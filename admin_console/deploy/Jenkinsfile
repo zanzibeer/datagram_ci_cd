@@ -70,7 +70,7 @@ pipeline {
                             sh "${params.CHART_NAME}/deploy/helm/setRevision.sh ${params.APP_VERSION}"
                             sh "${params.CHART_NAME}/deploy/helm/setImageTags.sh ${params.IMAGE_TAG}"
 //                             sh "helm dependency build ${params.CHART_NAME}/deploy/helm"
-                            sh "helm upgrade ${params.CHART_NAME} ${params.CHART_NAME}/deploy/helm/datagram --install --namespace ${params.CHART_NAME} --create-namespace \
+                            sh "helm upgrade ${params.CHART_NAME} ${params.CHART_NAME}/deploy/helm --install --namespace ${params.CHART_NAME} --create-namespace \
                             --set postgresql.auth.password=\"chAngE_Me\""
                         }
                     }
