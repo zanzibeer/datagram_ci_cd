@@ -20,22 +20,22 @@ pipeline {
         skipDefaultCheckout true
     }
 
-    agent {
-        kubernetes {
-            yamlFile 'airflow-client/build/builder.yaml'
-        }
-    }
-
-    stages {
-        
-        stage('Clone git repo') {
-            steps {
-                container('git') {
-                    script {
-                        sh "git -C /kaniko/workspace/datagram_ci_cd pull"
-                    }
-                }
-            }
-        }
-    }
+//     agent {
+//         kubernetes {
+//             yamlFile 'airflow-client/build/builder.yaml'
+//         }
+//     }
+//
+//     stages {
+//
+//         stage('Clone git repo') {
+//             steps {
+//                 container('git') {
+//                     script {
+//                         sh "git -C /kaniko/workspace/datagram_ci_cd pull"
+//                     }
+//                 }
+//             }
+//         }
+//     }
 }
