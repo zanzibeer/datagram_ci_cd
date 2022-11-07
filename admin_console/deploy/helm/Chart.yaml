@@ -5,6 +5,6 @@ type: application
 version: ${revision}
 appVersion: "1.16.0"
 dependencies:
-  - name: postgres
+  - name: postgresql
     version: "^11"
     repository: "https://charts.bitnami.com/bitnami"
