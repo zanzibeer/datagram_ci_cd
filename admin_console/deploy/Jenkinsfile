@@ -53,6 +53,7 @@ pipeline {
             steps {
                 container('git') {
                     script {
+                        sh "git -C /kaniko/workspace/datagram_ci_cd stash"
                         sh "git -C /kaniko/workspace/datagram_ci_cd pull"
 //                             sh "git clone https://github.com/zanzibeer/${params.CHART_NAME}_deploy.git"
                     }
