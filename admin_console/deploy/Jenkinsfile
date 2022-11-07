@@ -3,7 +3,7 @@ properties([
                 [
                         stringParam(
                                 name: 'CHART_NAME',
-                                defaultValue: 'admin_console'
+                                defaultValue: 'admin-console'
                         ),
                         stringParam(
                                 name: 'APP_VERSION',
