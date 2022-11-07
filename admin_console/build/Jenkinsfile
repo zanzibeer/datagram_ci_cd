@@ -15,7 +15,7 @@ properties([
                         ),
                         stringParam(
                                 name: 'BRANCH',
-                                defaultValue: 'main'
+                                defaultValue: 'develop'
                         )
                 ]
         )
