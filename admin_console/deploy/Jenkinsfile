@@ -3,7 +3,7 @@ properties([
                 [
                         stringParam(
                                 name: 'CHART_NAME',
-                                defaultValue: 'datagram'
+                                defaultValue: 'admin-console'
                         ),
                         stringParam(
                                 name: 'APP_VERSION',
@@ -26,7 +26,7 @@ pipeline {
 
     agent {
         kubernetes {
-            yamlFile 'builder.yaml'
+            yamlFile 'admin_console/deploy/builder.yaml'
         }
     }
 
@@ -53,7 +53,8 @@ pipeline {
             steps {
                 container('git') {
                     script {
-                            sh "git clone https://github.com/zanzibeer/${params.CHART_NAME}_deploy.git"
+                        sh "git -C /kaniko/workspace/datagram_ci_cd pull"
+//                             sh "git clone https://github.com/zanzibeer/${params.CHART_NAME}_deploy.git"
                     }
                 }
             }
@@ -63,13 +64,13 @@ pipeline {
             steps {
                 container('helm-cli') {
                     script {
-                        dir ("${params.CHART_NAME}_deploy") {
-                            sh "chmod +x helm/setRevision.sh"
-                            sh "chmod +x helm/setImageTags.sh"
-                            sh "./helm/setRevision.sh ${params.APP_VERSION}"
-                            sh "./helm/setImageTags.sh ${params.IMAGE_TAG}"
-                            sh "helm dependency build helm/datagram"
-                            sh "helm upgrade ${params.CHART_NAME} helm/datagram --install --namespace neoflex-${params.CHART_NAME} --create-namespace \
+                        dir ("/kaniko/workspace/datagram_ci_cd") {
+                            sh "chmod +x ${params.CHART_NAME}/deploy/helm/setRevision.sh"
+                            sh "chmod +x ${params.CHART_NAME}/deploy/helm/setImageTags.sh"
+                            sh "${params.CHART_NAME}/deploy/helm/setRevision.sh ${params.APP_VERSION}"
+                            sh "${params.CHART_NAME}/deploy/helm/setImageTags.sh ${params.IMAGE_TAG}"
+//                             sh "helm dependency build ${params.CHART_NAME}/deploy/helm"
+                            sh "helm upgrade ${params.CHART_NAME} ${params.CHART_NAME}/deploy/helm/datagram --install --namespace ${params.CHART_NAME} --create-namespace \
                             --set postgresql.auth.password=\"chAngE_Me\""
                         }
                     }

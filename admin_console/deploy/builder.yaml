@@ -10,7 +10,15 @@ spec:
       image: alpine/git
       command: ["cat"]
       tty: true
+      volumeMounts:
+        - name: kaniko-workspace
+          mountPath: /kaniko/workspace
+          readOnly: false
     - name: helm-cli
       image: lachlanevenson/k8s-helm
       command: ["cat"]
       tty: true
+  volumes:
+    - name: kaniko-workspace
+      persistentVolumeClaim:
+        claimName: jenkins-build

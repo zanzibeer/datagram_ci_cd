@@ -8,7 +8,7 @@ image:
   repository: zanzibeer/admin-console
   pullPolicy: Always
   # Overrides the image tag whose default is the chart appVersion.
-  tag: "0.1"
+  tag: "${tags}"
 
 imagePullSecrets: []
 nameOverride: ""
