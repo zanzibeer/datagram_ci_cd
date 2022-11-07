@@ -13,9 +13,9 @@ properties([
                                 name: 'BUILD_PARAMS',
                                 defaultValue: ''
                         ),
-                        choiceParam(
+                        stringParam(
                                 name: 'BRANCH',
-                                choices: ['main', 'frontend']
+                                defaultValue: 'main'
                         )
                 ]
         )
