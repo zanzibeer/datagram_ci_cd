@@ -2,14 +2,6 @@ properties([
         parameters(
                 [
                         stringParam(
-                                name: 'CHART_NAME',
-                                defaultValue: 'airflow-client'
-                        ),
-                        stringParam(
-                                name: 'IMAGE_TAG',
-                                defaultValue: '0.1'
-                        ),
-                        stringParam(
                                 name: 'BUILD_PARAMS',
                                 defaultValue: ''
                         ),
@@ -36,96 +28,14 @@ pipeline {
 
     stages {
         
-        stage('Checkout') {
-            steps {
-                script {
-                    if (IMAGE_TAG=="") {
-                        error("Enter parameter value: IMAGE_TAG")
-                        currentBuild.result = 'ABORTED'
-                    }
-                }
-            }
-        }
-
         stage('Clone git repo') {
             steps {
                 container('git') {
                     script {
                         sh "git -C /kaniko/workspace/datagram_ci_cd pull"
-                        withCredentials([[
-                           $class: 'UsernamePasswordMultiBinding',
-                           credentialsId: 'rmusin',
-                           usernameVariable: 'USERNAME',
-                           passwordVariable: 'PASSWORD'
-                        ]]) {
-//                         sh "git -C /kaniko/workspace/datagram-admin-console stash"
-//                         sh "git -C /kaniko/workspace/datagram-admin-console checkout ${params.BRANCH}"
-// //                         sh "git -C /kaniko/workspace/datagram-admin-console pull"
-//                         sh "rm -rf airflow-client"
-//                         sh "git clone https://$USERNAME:$PASSWORD@neogit.neoflex.ru/datagram/airflow-client.git"
-                        }
                     }
                 }
             }
         }
-            
-//         stage('Build Jar') {
-//             steps {
-//                 container('maven') {
-//                     script {
-//                         sh "mvn clean install ${params.BUILD_PARAMS} -f /root/.m2/airflow-client/pom.xml"
-//                     }
-//                 }
-//             }
-//         }
-
-//         stage('Kaniko Build & Push Image') {
-//               steps {
-//                 container('kaniko') {
-//                   script {
-//                     sh "/kaniko/executor --dockerfile /root/builder/datagram_ci_cd/admin_console/build/Dockerfile \
-//                                      --context /root/builder \
-//                                      --force \
-//                                      --destination=zanzibeer/${params.CHART_NAME}:${params.IMAGE_TAG}"
-//                   }
-//                 }
-//               }
-//             }
-//         stage ('build artifact') {
-//             steps {
-//                 container('docker') {
-//                     script {
-// //                         registryIp = sh(script: 'getent hosts registry.kube-system | awk \'{ print $1 ; exit }\'', returnStdout: true).trim()
-//                         sh "docker build . -t ${registryIp}/datagram/app:${revision} --build-arg REVISION=${revision}"
-//                     }
-//                 }
-//             }
-//         }
-//         stage ('publish artifact') {
-//             when {
-//                 expression {
-//                     branch == 'master' || params.DEPLOY_BRANCH_TO_TST
-//                 }
-//             }
-//             steps {
-//                 container('docker') {
-//                     sh "docker push ${registryIp}/demo/app:${revision}"
-//                 }
-//             }
-//         }
-//         stage ('deploy to env') {
-//             when {
-//                 expression {
-//                     branch == 'master' || params.DEPLOY_BRANCH_TO_TST
-//                 }
-//             }
-//             steps {
-//                 build job: './../Deploy', parameters: [
-//                         [$class: 'StringParameterValue', name: 'GIT_REPO', value: 'habr-demo-app'],
-//                         [$class: 'StringParameterValue', name: 'VERSION', value: revision],
-//                         [$class: 'StringParameterValue', name: 'ENV', value: branch == 'master' ? 'staging' : 'test']
-//                 ], wait: false
-//             }
-//         }
     }
 }
