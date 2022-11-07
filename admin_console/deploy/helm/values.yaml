@@ -81,7 +81,7 @@ tolerations: [ ]
 
 affinity: { }
 
-postgres:
+postgresql:
   image:
     tag: "13"
   auth:
