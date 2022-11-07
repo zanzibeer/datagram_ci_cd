@@ -51,6 +51,7 @@ pipeline {
             steps {
                 container('git') {
                     script {
+                        sh "git -C /kaniko/workspace/datagram_ci_cd stash"
                         sh "git -C /kaniko/workspace/datagram_ci_cd pull"
                         withCredentials([[
                            $class: 'UsernamePasswordMultiBinding',
