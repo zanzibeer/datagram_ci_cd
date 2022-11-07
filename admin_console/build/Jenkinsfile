@@ -96,8 +96,8 @@ pipeline {
               steps {
                 container('kaniko') {
                   script {
-                    sh "chmod +x /kaniko/workspace/datagram_ci_cd/admin_console/build/helm/setUrl.sh"
-                    sh "/kaniko/workspace/datagram_ci_cd/admin_console/build/helm/setUrl.sh"
+                    sh "chmod +x /kaniko/workspace/datagram_ci_cd/admin_console/build/setUrl.sh"
+                    sh "/kaniko/workspace/datagram_ci_cd/admin_console/build/setUrl.sh"
                     sh "/kaniko/executor --dockerfile /root/builder/datagram_ci_cd/admin_console/build/Dockerfile \
                                      --context /root/builder \
                                      --force \
