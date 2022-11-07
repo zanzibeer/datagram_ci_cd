@@ -3,11 +3,11 @@ properties([
                 [
                         stringParam(
                                 name: 'CHART_NAME',
-                                defaultValue: 'admin-console'
+                                defaultValue: 'airflow-client'
                         ),
                         stringParam(
                                 name: 'IMAGE_TAG',
-                                defaultValue: ''
+                                defaultValue: '0.1'
                         ),
                         stringParam(
                                 name: 'BUILD_PARAMS',
