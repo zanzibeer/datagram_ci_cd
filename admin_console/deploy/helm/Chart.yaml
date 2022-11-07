@@ -7,4 +7,3 @@ appVersion: "1.16.0"
 dependencies:
   - name: postgres
     version: "^11"
-    repository:
