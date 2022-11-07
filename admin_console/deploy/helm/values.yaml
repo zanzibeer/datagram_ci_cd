@@ -91,3 +91,7 @@ postgresql:
   primary:
     persistence:
       enabled: true
+
+env:
+  - name: "POSTGRES_URL_CONSOLE"
+    value: "jdbc:postgresql://admin-console-postgresql/dg-admin-console"
