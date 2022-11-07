@@ -80,3 +80,14 @@ nodeSelector: { }
 tolerations: [ ]
 
 affinity: { }
+
+postgres:
+  image:
+    tag: "13"
+  auth:
+    username: "dg-admin-console"
+    password: "postgres"
+    database: "postgres"
+  primary:
+    persistence:
+      enabled: true
