@@ -60,9 +60,9 @@ pipeline {
                         ]]) {
 //                         sh "git -C /kaniko/workspace/datagram-admin-console stash"
 //                         sh "git -C /kaniko/workspace/datagram-admin-console checkout ${params.BRANCH}"
-//                         sh "git -C /kaniko/workspace/datagram-admin-console pull"
-                        sh "rm -rf airflow-client"
-                        sh "git clone https://$USERNAME:$PASSWORD@neogit.neoflex.ru/datagram/airflow-client.git"
+// //                         sh "git -C /kaniko/workspace/datagram-admin-console pull"
+//                         sh "rm -rf airflow-client"
+//                         sh "git clone https://$USERNAME:$PASSWORD@neogit.neoflex.ru/datagram/airflow-client.git"
                         }
                     }
                 }
