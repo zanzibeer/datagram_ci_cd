@@ -70,11 +70,10 @@ pipeline {
                         sh "chmod +x /kaniko/workspace/datagram_ci_cd/admin_console/deploy/helm/setImageTags.sh"
                         sh "/kaniko/workspace/datagram_ci_cd/admin_console/deploy/helm/setRevision.sh ${params.APP_VERSION}"
                         sh "/kaniko/workspace/datagram_ci_cd/admin_console/deploy/helm/setImageTags.sh ${params.IMAGE_TAG}"
-                        sh "helm repo add bitnami https://charts.bitnami.com/bitnami"
-                        sh "helm dependency build /kaniko/workspace/datagram_ci_cd/admin_console/deploy/helm"
+//                         sh "helm repo add bitnami https://charts.bitnami.com/bitnami"
+//                         sh "helm dependency build /kaniko/workspace/datagram_ci_cd/admin_console/deploy/helm"
                         sh "helm upgrade ${params.CHART_NAME} /kaniko/workspace/datagram_ci_cd/admin_console/deploy/helm --install --namespace ${params.CHART_NAME} --create-namespace \
-                            --set postgresql.auth.password=\"postgres\" \
-                            --set global.postgresql.auth.postgresPassword=\"postgres\""
+                            --set postgresql.auth.password=\"postgres\""
 //                         dir ("/kaniko/workspace/datagram_ci_cd") {
 //                             sh "chmod +x ${params.CHART_NAME}/deploy/helm/setRevision.sh"
 //                             sh "chmod +x ${params.CHART_NAME}/deploy/helm/setImageTags.sh"
