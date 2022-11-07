@@ -69,15 +69,15 @@ pipeline {
             }
         }
             
-        stage('Build Jar') {
-            steps {
-                container('maven') {
-                    script {
-                        sh "mvn clean install ${params.BUILD_PARAMS} -f /root/.m2/airflow-client/pom.xml"
-                    }
-                }
-            }
-        }
+//         stage('Build Jar') {
+//             steps {
+//                 container('maven') {
+//                     script {
+//                         sh "mvn clean install ${params.BUILD_PARAMS} -f /root/.m2/airflow-client/pom.xml"
+//                     }
+//                 }
+//             }
+//         }
 
 //         stage('Kaniko Build & Push Image') {
 //               steps {
