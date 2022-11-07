@@ -47,7 +47,7 @@ pipeline {
             }
         }
 
-        stage('Clone git repo') {
+        stage('Clone git repos') {
             steps {
                 container('git') {
                     script {
@@ -61,6 +61,8 @@ pipeline {
 //                         sh "git -C /kaniko/workspace/datagram-admin-console stash"
 //                         sh "git -C /kaniko/workspace/datagram-admin-console checkout ${params.BRANCH}"
 //                         sh "git -C /kaniko/workspace/datagram-admin-console pull"
+                        sh "rm -rf airflow-client"
+                        sh "git clone https://$USERNAME:$PASSWORD@neogit.neoflex.ru/datagram/airflow-client.git"
                         sh "rm -rf datagram-admin-console"
                         sh "git clone https://$USERNAME:$PASSWORD@neogit.neoflex.ru/datagram/datagram-admin-console.git"
                         }
@@ -68,8 +70,18 @@ pipeline {
                 }
             }
         }
+
+        stage('Build airflow-client Jar') {
+            steps {
+                container('maven') {
+                    script {
+                        sh "mvn clean install ${params.BUILD_PARAMS} -f /root/.m2/airflow-client/pom.xml"
+                    }
+                }
+            }
+        }
             
-        stage('Build Jar') {
+        stage('Build admin-console Jar') {
             steps {
                 container('maven') {
                     script {
