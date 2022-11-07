@@ -85,9 +85,9 @@ postgresql:
   image:
     tag: "13"
   auth:
-    username: "dg-admin-console"
+    username: "postgres"
     password: "postgres"
-    database: "postgres"
+    database: "dg-admin-console"
   primary:
     persistence:
       enabled: true
