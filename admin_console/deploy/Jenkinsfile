@@ -79,7 +79,7 @@ pipeline {
                             sh "helm dependency build ${params.CHART_NAME}/deploy/helm"
                             sh "helm upgrade ${params.CHART_NAME} ${params.CHART_NAME}/deploy/helm --install --namespace ${params.CHART_NAME} --create-namespace \
                             --set postgresql.auth.password=\"chAngE_Me\""
-//                         }
+                        }
                     }
                 }
             }
