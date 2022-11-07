@@ -14,6 +14,10 @@ properties([
                                 defaultValue: ''
                         ),
                         stringParam(
+                                name: 'URL',
+                                defaultValue: 'admin-console-postgresql'
+                        ),
+                        stringParam(
                                 name: 'BRANCH',
                                 defaultValue: 'develop'
                         )
@@ -97,7 +101,7 @@ pipeline {
                 container('kaniko') {
                   script {
                     sh "chmod +x /root/builder/datagram_ci_cd/admin_console/build/setUrl.sh"
-                    sh "/root/builder/datagram_ci_cd/admin_console/build/setUrl.sh"
+                    sh "/root/builder/datagram_ci_cd/admin_console/build/setUrl.sh ${params.URL}"
                     sh "/kaniko/executor --dockerfile /root/builder/datagram_ci_cd/admin_console/build/Dockerfile \
                                      --context /root/builder \
                                      --force \
