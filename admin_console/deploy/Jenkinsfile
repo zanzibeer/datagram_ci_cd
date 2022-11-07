@@ -65,20 +65,20 @@ pipeline {
                 container('helm-cli') {
                     script {
 //                         sh "sleep 100"
-//                         sh "chmod +x /kaniko/workspace/datagram_ci_cd/${params.CHART_NAME}/deploy/helm/setRevision.sh"
-//                         sh "chmod +x /kaniko/workspace/datagram_ci_cd/${params.CHART_NAME}/deploy/helm/setImageTags.sh"
-//                         sh "/kaniko/workspace/datagram_ci_cd/${params.CHART_NAME}/deploy/helm/setRevision.sh ${params.APP_VERSION}"
-//                         sh "/kaniko/workspace/datagram_ci_cd/${params.CHART_NAME}/deploy/helm/setImageTags.sh ${params.IMAGE_TAG}"
-//                         sh "helm upgrade ${params.CHART_NAME} /kaniko/workspace/datagram_ci_cd/${params.CHART_NAME}/deploy/helm --install --namespace ${params.CHART_NAME} --create-namespace \
-//                             --set postgresql.auth.password=\"chAngE_Me\""
-                        dir ("/kaniko/workspace/datagram_ci_cd") {
-                            sh "chmod +x ${params.CHART_NAME}/deploy/helm/setRevision.sh"
-                            sh "chmod +x ${params.CHART_NAME}/deploy/helm/setImageTags.sh"
-                            sh "${params.CHART_NAME}/deploy/helm/setRevision.sh ${params.APP_VERSION}"
-                            sh "${params.CHART_NAME}/deploy/helm/setImageTags.sh ${params.IMAGE_TAG}"
-                            sh "helm dependency build ${params.CHART_NAME}/deploy/helm"
-                            sh "helm upgrade ${params.CHART_NAME} ${params.CHART_NAME}/deploy/helm --install --namespace ${params.CHART_NAME} --create-namespace \
+                        sh "chmod +x /kaniko/workspace/datagram_ci_cd/${params.CHART_NAME}/deploy/helm/setRevision.sh"
+                        sh "chmod +x /kaniko/workspace/datagram_ci_cd/${params.CHART_NAME}/deploy/helm/setImageTags.sh"
+                        sh "/kaniko/workspace/datagram_ci_cd/${params.CHART_NAME}/deploy/helm/setRevision.sh ${params.APP_VERSION}"
+                        sh "/kaniko/workspace/datagram_ci_cd/${params.CHART_NAME}/deploy/helm/setImageTags.sh ${params.IMAGE_TAG}"
+                        sh "helm upgrade ${params.CHART_NAME} /kaniko/workspace/datagram_ci_cd/${params.CHART_NAME}/deploy/helm --install --namespace ${params.CHART_NAME} --create-namespace \
                             --set postgresql.auth.password=\"chAngE_Me\""
+//                         dir ("/kaniko/workspace/datagram_ci_cd") {
+//                             sh "chmod +x ${params.CHART_NAME}/deploy/helm/setRevision.sh"
+//                             sh "chmod +x ${params.CHART_NAME}/deploy/helm/setImageTags.sh"
+//                             sh "${params.CHART_NAME}/deploy/helm/setRevision.sh ${params.APP_VERSION}"
+//                             sh "${params.CHART_NAME}/deploy/helm/setImageTags.sh ${params.IMAGE_TAG}"
+//                             sh "helm dependency build ${params.CHART_NAME}/deploy/helm"
+//                             sh "helm upgrade ${params.CHART_NAME} ${params.CHART_NAME}/deploy/helm --install --namespace ${params.CHART_NAME} --create-namespace \
+//                             --set postgresql.auth.password=\"chAngE_Me\""
                         }
                     }
                 }
