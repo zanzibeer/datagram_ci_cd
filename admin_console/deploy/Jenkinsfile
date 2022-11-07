@@ -7,7 +7,7 @@ properties([
                         ),
                         stringParam(
                                 name: 'APP_VERSION',
-                                defaultValue: ''
+                                defaultValue: '0.1'
                         ),
                         stringParam(
                                 name: 'IMAGE_TAG',
