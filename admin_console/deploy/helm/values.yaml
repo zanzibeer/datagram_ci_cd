@@ -81,16 +81,16 @@ tolerations: [ ]
 
 affinity: { }
 
-postgresql:
-  image:
-    tag: "13"
-  auth:
-    username: "postgres"
-    password: "postgres"
-    database: "dg-admin-console"
-  primary:
-    persistence:
-      enabled: true
+#postgresql:
+#  image:
+#    tag: "13"
+#  auth:
+#    username: "postgres"
+#    password: "postgres"
+#    database: "dg-admin-console"
+#  primary:
+#    persistence:
+#      enabled: true
 
 env:
   - name: "POSTGRES_URL_CONSOLE"
