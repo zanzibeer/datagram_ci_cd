@@ -66,9 +66,8 @@ pipeline {
                         sh "rm -rf /kaniko/workspace/airflow-client"
                         sh "git clone https://$USERNAME:$PASSWORD@neogit.neoflex.ru/datagram/airflow-client.git /kaniko/workspace/airflow-client"
                         sh "rm -rf /kaniko/workspace/datagram-admin-console"
-                        sh "git clone https://$USERNAME:$PASSWORD@neogit.neoflex.ru/datagram/datagram-admin-console.git /kaniko/workspace/datagram-admin-console -b ${params.BRANCH}"
-//                         sh "chmod +x /kaniko/workspace/datagram_ci_cd/admin_console/build/setUrl.sh"
-//                         sh "/kaniko/workspace/datagram_ci_cd/admin_console/build/setUrl.sh ${params.URL}"
+                        sh "git clone https://$USERNAME:$PASSWORD@neogit.neoflex.ru/datagram/datagram-admin-console.git \
+                            /kaniko/workspace/datagram-admin-console -b ${params.BRANCH}"
                         }
                     }
                 }
@@ -96,52 +95,16 @@ pipeline {
         }
 
         stage('Kaniko Build & Push Image') {
-              steps {
+            steps {
                 container('kaniko') {
-                  script {
-                    sh "/kaniko/executor --dockerfile /root/builder/datagram_ci_cd/admin_console/build/Dockerfile \
-                                     --context /root/builder \
-                                     --force \
-                                     --destination=zanzibeer/${params.CHART_NAME}:${params.IMAGE_TAG}"
-                  }
+                    script {
+                        sh "/kaniko/executor --dockerfile /root/builder/datagram_ci_cd/admin_console/build/Dockerfile \
+                            --context /root/builder \
+                            --force \
+                            --destination=zanzibeer/${params.CHART_NAME}:${params.IMAGE_TAG}"
+                    }
                 }
-              }
             }
-//         stage ('build artifact') {
-//             steps {
-//                 container('docker') {
-//                     script {
-// //                         registryIp = sh(script: 'getent hosts registry.kube-system | awk \'{ print $1 ; exit }\'', returnStdout: true).trim()
-//                         sh "docker build . -t ${registryIp}/datagram/app:${revision} --build-arg REVISION=${revision}"
-//                     }
-//                 }
-//             }
-//         }
-//         stage ('publish artifact') {
-//             when {
-//                 expression {
-//                     branch == 'master' || params.DEPLOY_BRANCH_TO_TST
-//                 }
-//             }
-//             steps {
-//                 container('docker') {
-//                     sh "docker push ${registryIp}/demo/app:${revision}"
-//                 }
-//             }
-//         }
-//         stage ('deploy to env') {
-//             when {
-//                 expression {
-//                     branch == 'master' || params.DEPLOY_BRANCH_TO_TST
-//                 }
-//             }
-//             steps {
-//                 build job: './../Deploy', parameters: [
-//                         [$class: 'StringParameterValue', name: 'GIT_REPO', value: 'habr-demo-app'],
-//                         [$class: 'StringParameterValue', name: 'VERSION', value: revision],
-//                         [$class: 'StringParameterValue', name: 'ENV', value: branch == 'master' ? 'staging' : 'test']
-//                 ], wait: false
-//             }
-//         }
+        }
     }
 }
