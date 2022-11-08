@@ -70,8 +70,8 @@ pipeline {
                         sh "git clone https://$USERNAME:$PASSWORD@neogit.neoflex.ru/datagram/airflow-client.git /kaniko/workspace/airflow-client"
                         sh "rm -rf /kaniko/workspace/datagram-admin-console"
                         sh "git clone https://$USERNAME:$PASSWORD@neogit.neoflex.ru/datagram/datagram-admin-console.git /kaniko/workspace/datagram-admin-console -b ${params.BRANCH}"
-                        sh "chmod +x /kaniko/workspace/datagram_ci_cd/admin_console/build/setUrl.sh"
-                        sh "/kaniko/workspace/datagram_ci_cd/admin_console/build/setUrl.sh ${params.URL}"
+//                         sh "chmod +x /kaniko/workspace/datagram_ci_cd/admin_console/build/setUrl.sh"
+//                         sh "/kaniko/workspace/datagram_ci_cd/admin_console/build/setUrl.sh ${params.URL}"
                         }
                     }
                 }
