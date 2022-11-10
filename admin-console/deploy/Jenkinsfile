@@ -1,0 +1,92 @@
+properties([
+
+// описание параметров сборки пайплайна
+        parameters(
+                [
+                        stringParam(
+                                name: 'CHART_NAME',
+                                defaultValue: 'admin-console'
+                        ),
+                        stringParam(
+                                name: 'APP_VERSION',
+                                defaultValue: '0.1'
+                        ),
+                        stringParam(
+                                name: 'IMAGE_TAG',
+                                defaultValue: ''
+                        )
+                ]
+        )
+])
+
+pipeline {
+
+// параметры конвейера
+    options {
+        ansiColor('xterm')
+        skipDefaultCheckout true
+        disableConcurrentBuilds()
+    }
+
+    environment {
+        WORKDIR = '/kaniko/workspace/datagram_ci_cd'
+    }
+
+// манифест с описанием спецификации пода сборщика
+    agent {
+        kubernetes {
+            yamlFile 'admin_console/deploy/builder.yaml'
+        }
+    }
+
+    stages {
+
+// стадия проверки входных параметров
+        stage('Checkout') {
+            steps {
+                script {
+                    if (IMAGE_TAG=="") {
+                        error("Check entered parameters values: IMAGE_TAG or APP_VERSION. They must not be empty!")
+                        currentBuild.result = 'ABORTED'
+                    }
+                    if (APP_VERSION=="") {
+                        error("Check entered parameters values: IMAGE_TAG or APP_VERSION. They must not be empty!")
+                        currentBuild.result = 'ABORTED'
+                    }
+                }
+            }
+        }
+
+// стадия работы с репозиториями. в credentialsId должен быть указан реальный credentialsId, который добавлен в настройках дженкинса
+// репозитории лежат на nfs-сервере
+        stage('Clone git repo') {
+            steps {
+                container('git') {
+                    script {
+                        sh "git -C ${WORKDIR} stash"
+                        sh "git -C ${WORKDIR} pull"
+                    }
+                }
+            }
+        }
+
+// стадия деплоя хелмчарта на стенд
+        stage('Deploy to env') {
+            steps {
+                container('helm-cli') {
+                    script {
+                        sh "chmod +x ${WORKDIR}/${params.CHART_NAME}/deploy/helm/setRevision.sh"
+                        sh "chmod +x ${WORKDIR}/${params.CHART_NAME}/deploy/helm/setImageTags.sh"
+                        sh "${WORKDIR}/${params.CHART_NAME}/deploy/helm/setRevision.sh ${params.APP_VERSION}"
+                        sh "${WORKDIR}/${params.CHART_NAME}/deploy/helm/setImageTags.sh ${params.IMAGE_TAG}"
+//                         sh "helm dependency build /kaniko/workspace/datagram_ci_cd/admin_console/deploy/helm"
+                        sh "helm upgrade ${params.CHART_NAME} ${WORKDIR}/${params.CHART_NAME}/deploy/helm --install \
+                            --namespace ${params.CHART_NAME} --create-namespace \
+                            --set postgresql.auth.password=\"postgres\" \
+                            --set global.postgresql.auth.postgresPassword=\"postgres\""
+                    }
+                }
+            }
+        }
+    }
+}
