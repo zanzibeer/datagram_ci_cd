@@ -1,4 +1,6 @@
 properties([
+
+// описание параметров сборки пайплайна
         parameters(
                 [
                         stringParam(
@@ -19,11 +21,15 @@ properties([
 
 pipeline {
 
+// параметры конвейера
     options {
-            ansiColor('xterm')
-            skipDefaultCheckout true
-        }
+        ansiColor('xterm')
+        skipDefaultCheckout true
+        timestamps()
+        disableConcurrentBuilds()
+    }
 
+// манифест с описанием спецификации пода сборщика
     agent {
         kubernetes {
             yamlFile 'admin_console/deploy/builder.yaml'
@@ -32,6 +38,7 @@ pipeline {
 
     stages {
 
+// стадия проверки входных параметров
         stage('Checkout') {
             steps {
                 script {
@@ -47,25 +54,24 @@ pipeline {
             }
         }
 
-
-
+// стадия работы с репозиториями. в credentialsId должен быть указан реальный credentialsId, который добавлен в настройках дженкинса
+// репозитории лежат на nfs-сервере
         stage('Clone git repo') {
             steps {
                 container('git') {
                     script {
                         sh "git -C /kaniko/workspace/datagram_ci_cd stash"
                         sh "git -C /kaniko/workspace/datagram_ci_cd pull"
-//                             sh "git clone https://github.com/zanzibeer/${params.CHART_NAME}_deploy.git"
                     }
                 }
             }
         }
             
+// стадия деплоя хелмчарта на стенд
         stage('Deploy to env') {
             steps {
                 container('helm-cli') {
                     script {
-//                         sh "sleep 100"
                         sh "chmod +x /kaniko/workspace/datagram_ci_cd/admin_console/deploy/helm/setRevision.sh"
                         sh "chmod +x /kaniko/workspace/datagram_ci_cd/admin_console/deploy/helm/setImageTags.sh"
                         sh "/kaniko/workspace/datagram_ci_cd/admin_console/deploy/helm/setRevision.sh ${params.APP_VERSION}"
@@ -75,15 +81,6 @@ pipeline {
                             --namespace ${params.CHART_NAME} --create-namespace \
                             --set postgresql.auth.password=\"postgres\" \
                             --set global.postgresql.auth.postgresPassword=\"postgres\""
-//                         dir ("/kaniko/workspace/datagram_ci_cd") {
-//                             sh "chmod +x ${params.CHART_NAME}/deploy/helm/setRevision.sh"
-//                             sh "chmod +x ${params.CHART_NAME}/deploy/helm/setImageTags.sh"
-//                             sh "${params.CHART_NAME}/deploy/helm/setRevision.sh ${params.APP_VERSION}"
-//                             sh "${params.CHART_NAME}/deploy/helm/setImageTags.sh ${params.IMAGE_TAG}"
-//                             sh "helm dependency build ${params.CHART_NAME}/deploy/helm"
-//                             sh "helm upgrade ${params.CHART_NAME} ${params.CHART_NAME}/deploy/helm --install --namespace ${params.CHART_NAME} --create-namespace \
-//                             --set postgresql.auth.password=\"chAngE_Me\""
-//                         }
                     }
                 }
             }
