@@ -35,7 +35,7 @@ pipeline {
 // манифест с описанием спецификации пода сборщика
     agent {
         kubernetes {
-            yamlFile 'admin_console/deploy/builder.yaml'
+            yamlFile '${params.CHART_NAME}/deploy/builder.yaml'
         }
     }
 
@@ -79,7 +79,7 @@ pipeline {
                         sh "chmod +x ${WORKDIR}/${params.CHART_NAME}/deploy/helm/setImageTags.sh"
                         sh "${WORKDIR}/${params.CHART_NAME}/deploy/helm/setRevision.sh ${params.APP_VERSION}"
                         sh "${WORKDIR}/${params.CHART_NAME}/deploy/helm/setImageTags.sh ${params.IMAGE_TAG}"
-//                         sh "helm dependency build /kaniko/workspace/datagram_ci_cd/admin_console/deploy/helm"
+//                         sh "helm dependency build ${WORKDIR}/${params.CHART_NAME}/deploy/helm"
                         sh "helm upgrade ${params.CHART_NAME} ${WORKDIR}/${params.CHART_NAME}/deploy/helm --install \
                             --namespace ${params.CHART_NAME} --create-namespace \
                             --set postgresql.auth.password=\"postgres\" \
