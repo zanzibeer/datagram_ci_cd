@@ -35,7 +35,7 @@ pipeline {
 // манифест с описанием спецификации пода сборщика
     agent {
         kubernetes {
-            yamlFile '${params.CHART_NAME}/deploy/builder.yaml'
+            yamlFile 'admin-console/deploy/builder.yaml'
         }
     }
 
