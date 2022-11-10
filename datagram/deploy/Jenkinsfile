@@ -25,6 +25,10 @@ pipeline {
         disableConcurrentBuilds()
     }
 
+    environment {
+        WORKDIR = '/kaniko/workspace/datagram_ci_cd'
+    }
+
     agent {
         kubernetes {
             yamlFile 'datagram/deploy/builder.yaml'
@@ -54,8 +58,8 @@ pipeline {
             steps {
                 container('git') {
                     script {
-                        sh "git -C /kaniko/workspace/datagram_ci_cd stash"
-                        sh "git -C /kaniko/workspace/datagram_ci_cd pull"
+                        sh "git -C ${WORKDIR} stash"
+                        sh "git -C ${WORKDIR} pull"
                     }
                 }
             }
@@ -65,19 +69,22 @@ pipeline {
             steps {
                 container('helm-cli') {
                     script {
-                        sh "chmod +x /kaniko/workspace/datagram_ci_cd/${params.CHART_NAME}/deploy/helm/setRevision.sh"
-                        sh "chmod +x /kaniko/workspace/datagram_ci_cd/${params.CHART_NAME}/deploy/helm/setImageTags.sh"
-                        sh "/kaniko/workspace/datagram_ci_cd/${params.CHART_NAME}/deploy/helm/setRevision.sh ${params.APP_VERSION}"
-                        sh "/kaniko/workspace/datagram_ci_cd/${params.CHART_NAME}/deploy/helm/setImageTags.sh ${params.IMAGE_TAG}"
-                        dir ("${params.CHART_NAME}_deploy") {
-                            sh "chmod +x helm/setRevision.sh"
-                            sh "chmod +x helm/setImageTags.sh"
-                            sh "./helm/setRevision.sh ${params.APP_VERSION}"
-                            sh "./helm/setImageTags.sh ${params.IMAGE_TAG}"
-                            sh "helm dependency build helm/datagram"
-                            sh "helm upgrade ${params.CHART_NAME} helm/datagram --install --namespace neoflex-${params.CHART_NAME} --create-namespace \
-                            --set postgresql.auth.password=\"chAngE_Me\""
-                        }
+                        sh "chmod +x ${WORKDIR}/${params.CHART_NAME}/deploy/helm/setRevision.sh"
+                        sh "chmod +x ${WORKDIR}/${params.CHART_NAME}/deploy/helm/setImageTags.sh"
+                        sh "${WORKDIR}/${params.CHART_NAME}/deploy/helm/setRevision.sh ${params.APP_VERSION}"
+                        sh "${WORKDIR}/${params.CHART_NAME}/deploy/helm/setImageTags.sh ${params.IMAGE_TAG}"
+                        sh "helm dependency build ${WORKDIR}/${params.CHART_NAME}/deploy/helm/datagram"
+                        sh "helm upgrade ${params.CHART_NAME} ${WORKDIR}/${params.CHART_NAME}/deploy/helm/datagram --install --namespace neoflex-${params.CHART_NAME} --create-namespace \
+                        --set postgresql.auth.password=\"chAngE_Me\""
+//                         dir ("${params.CHART_NAME}_deploy") {
+//                             sh "chmod +x helm/setRevision.sh"
+//                             sh "chmod +x helm/setImageTags.sh"
+//                             sh "./helm/setRevision.sh ${params.APP_VERSION}"
+//                             sh "./helm/setImageTags.sh ${params.IMAGE_TAG}"
+//                             sh "helm dependency build helm/datagram"
+//                             sh "helm upgrade ${params.CHART_NAME} helm/datagram --install --namespace neoflex-${params.CHART_NAME} --create-namespace \
+//                             --set postgresql.auth.password=\"chAngE_Me\""
+//                         }
                     }
                 }
             }
