@@ -112,7 +112,8 @@ pipeline {
                         sh "/kaniko/executor --dockerfile /root/builder/datagram_ci_cd/admin_console/build/Dockerfile \
                             --context /root/builder \
                             --force \
-                            --destination=zanzibeer/${params.CHART_NAME}:${params.IMAGE_TAG}"
+                            --destination=zanzibeer/${params.CHART_NAME}:${params.IMAGE_TAG} \
+                            --destination=zanzibeer/${params.CHART_NAME}:latest"
                     }
                 }
             }
